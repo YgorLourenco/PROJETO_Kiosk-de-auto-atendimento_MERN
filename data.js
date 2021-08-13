@@ -11,8 +11,8 @@ const data = {
         {
             name: 'Burgers',
             image: '/images/burgers.jpg'
-        }
-    ]
+        },
+    ],
 }
 
 module.exports = data
