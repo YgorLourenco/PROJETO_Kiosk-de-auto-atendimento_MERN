@@ -34,6 +34,9 @@ export const useStyles = makeStyles((theme) => ({
     largeLogo: {
         height: 100,
     },
+    logo: {
+        height: 50,
+      },
     cards: {
         display: 'flex',
         justifyContent: 'center',
