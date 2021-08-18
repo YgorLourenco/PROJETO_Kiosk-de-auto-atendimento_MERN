@@ -48,6 +48,50 @@ app.post('/api/products', async(req, res) => {
 app.get('/api/categories', (req, res) => {
     res.send(data.categories)
 })
+// Modelo de banco de dados do MongoDB para completar o pedido
+const Order = mongoose.model('Order', new mongoose.Schema({
+    number: {type: Number, default: 0},
+    orderType: String,
+    paymentType: String,
+    isPaid: {type: Boolean, default: false},
+    isReady: {type: Boolean, default: false},
+    inProgress: {type: Boolean, default: true},
+    isCanceled: {type: Boolean, default: false},
+    isDelivered: {type: Boolean, default: false},
+    itemsPrice: Number,
+    taxPrice: Number,
+    totalPrice: Number,
+    orderItems: [
+        {
+            name: String,
+            price: Number,
+            quantity: Number,
+        },
+    ],
+},
+{
+    timestamps: true,
+},
+))
+
+app.post('/api/orders', async(req, res) => {
+    // Achar o ultimo pedido que estejam com menos de -1 sendo o limite 1
+    const lastOrder = await Order.find().sort({number: -1}).limit(1)
+    // Achar o ultimo pedido que seja igual a zero ou seja o primeiro pedido
+    const lastNumber = lastOrder.length === 0 ? 0 : lastOrder[0].number
+    // Vai verificar se esta faltando alguma informação do pedido
+    if (
+        !req.body.orderType || 
+        !req.body.paymentType || 
+        !req.body.orderItems || 
+        req.body.orderItems.length === 0
+    ) {
+        return res.send({message: 'Precisa de dados'})
+    }
+    // Esperar o pedido para ser salvo e depois enviado
+    const order = await Order({...req.body, number: lastNumber + 1}).save()
+    res.send(order)
+})
 
 const port = process.env.PORT || 5000
 

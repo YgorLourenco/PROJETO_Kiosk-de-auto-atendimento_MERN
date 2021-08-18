@@ -14,3 +14,9 @@ export const ORDER_ADD_ITEM = 'ORDER_ADD_ITEM'
 export const ORDER_REMOVE_ITEM = 'ORDER_REMOVE_ITEM'
 // Vai apagar todo o pedido
 export const ORDER_CLEAR = 'ORDER_CLEAR'
+// Ação para o tipo do pagamento para o pedido
+export const ORDER_SET_PAYMENT_TYPE = 'ORDER_SET_PAYMENT_TYPE'
+// Ação para criar uma requisição para o pedido
+export const ORDER_CREATE_REQUEST = 'ORDER_CREATE_REQUEST'
+export const ORDER_CREATE_SUCCESS = 'ORDER_CREATE_SUCCESS'
+export const ORDER_CREATE_FAIL = 'ORDER_CREATE_FAIL'

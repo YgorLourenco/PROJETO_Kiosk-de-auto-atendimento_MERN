@@ -1,5 +1,5 @@
 import React, {createContext, useReducer} from 'react'
-import { CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, ORDER_ADD_ITEM, ORDER_CLEAR, ORDER_REMOVE_ITEM, ORDER_SET_TYPE, PRODUCT_LIST_FAIL, PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS } from './constants'
+import { CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, ORDER_ADD_ITEM, ORDER_CLEAR, ORDER_CREATE_FAIL, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS, ORDER_REMOVE_ITEM, ORDER_SET_PAYMENT_TYPE, ORDER_SET_TYPE, PRODUCT_LIST_FAIL, PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS } from './constants'
 // Configurando o context da loja do app
 export const Store = createContext()
 
@@ -9,7 +9,9 @@ const initialState = {
     order: {
         orderType: 'Comer aqui',
         orderItems: [],
-    }
+        paymentType: 'Pague aqui',
+    },
+    orderCreate: { loading: true}
 }
 // Vai gerenciar as ações e os estados do reducer
 function reducer(state, action) {
@@ -47,6 +49,14 @@ function reducer(state, action) {
                 ...state,
                 order: {...state.order, orderType: action.payload},
             }
+
+        // Vai gerenciar o tipo de pagamento para o pedido
+        case ORDER_SET_PAYMENT_TYPE:
+            return{
+                ...state,
+                order: {...state.order, paymentType: action.payload}
+            }    
+        
         // Vai adicionar um item
         case ORDER_ADD_ITEM: {
             const item = action.payload
@@ -110,6 +120,24 @@ function reducer(state, action) {
                     itemsCount: 0,
                 }
             }
+        
+        case ORDER_CREATE_REQUEST: 
+        return { 
+            ...state,
+            orderCreate: {loading: true}
+        }
+        case ORDER_CREATE_SUCCESS: 
+        return { 
+            ...state,
+            orderCreate: {loading: false, newOrder: action.payload}
+        }
+        case ORDER_CREATE_FAIL:
+        return{
+            ...state,
+            orderCreate: {loading: false, error: action.payload}
+        }
+
+
 
         default: 
             return state

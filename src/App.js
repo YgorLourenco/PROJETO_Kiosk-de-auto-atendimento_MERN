@@ -2,8 +2,12 @@ import { Container, CssBaseline, Paper, ThemeProvider } from "@material-ui/core"
 import { createTheme } from '@material-ui/core/styles'
 import { BrowserRouter, Route } from "react-router-dom";
 import ChooseScreen from "./screens/ChooseScreen";
+import CompleteOrderScreen from "./screens/CompleteOrderScreen";
 import HomeScreen from "./screens/HomeScreen";
 import OrderScreen from "./screens/OrderScreen";
+import PaymentScreen from "./screens/PaymentScreen";
+import ReviewScreen from "./screens/ReviewScreen";
+import SelectPaymentScreen from "./screens/SelectPaymentScreen";
 
 const theme = createTheme({
   typography: {
@@ -37,6 +41,10 @@ function App() {
               <Route path='/' component={HomeScreen} exact={true}></Route>
               <Route path='/choose' component={ChooseScreen} exact={true}></Route>
               <Route path='/order' component={OrderScreen} exact={true}></Route>
+              <Route path='/review' component={ReviewScreen} exact={true}></Route>
+              <Route path='/select-payment' component={SelectPaymentScreen} exact></Route>
+              <Route path='/payment' component={PaymentScreen} exact></Route>
+              <Route path='/complete' component={CompleteOrderScreen} exact></Route>
             </Paper>
           </Container>
       </ThemeProvider>
