@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const path = require('path')
 const dotenv = require('dotenv')
 const data = require('./data')
 
@@ -91,6 +92,14 @@ app.post('/api/orders', async(req, res) => {
     // Esperar o pedido para ser salvo e depois enviado
     const order = await Order({...req.body, number: lastNumber + 1}).save()
     res.send(order)
+})
+
+// Caminho do back-end para o Heroku
+app.use(express.static(path.join(__dirname, '/build')))
+
+// Caminho para acessar a versão build do back-end
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/build/index.html'))
 })
 
 const port = process.env.PORT || 5000
