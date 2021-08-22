@@ -1,21 +1,31 @@
 import React, {createContext, useReducer} from 'react'
-import { CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, ORDER_ADD_ITEM, ORDER_CLEAR, ORDER_CREATE_FAIL, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS, ORDER_REMOVE_ITEM, ORDER_SET_PAYMENT_TYPE, ORDER_SET_TYPE, PRODUCT_LIST_FAIL, PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS } from './constants'
+import { CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, ORDER_ADD_ITEM, ORDER_CLEAR, ORDER_CREATE_FAIL, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS, ORDER_LIST_FAIL, ORDER_LIST_REQUEST, ORDER_LIST_SUCCESS, ORDER_QUEUE_LIST_FAIL, ORDER_QUEUE_LIST_REQUEST, ORDER_QUEUE_LIST_SUCCESS, ORDER_REMOVE_ITEM, ORDER_SET_PAYMENT_TYPE, ORDER_SET_TYPE, PRODUCT_LIST_FAIL, PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS, SCREEN_SET_WIDTH } from './constants'
 // Configurando o context da loja do app
 export const Store = createContext()
 
 const initialState = {
+    widthScreen: false,
     categoryList: {loading: true},
     productList: {loading: true},
+    queueList: { loading: true },
     order: {
         orderType: 'Comer aqui',
         orderItems: [],
         paymentType: 'Pague aqui',
     },
-    orderCreate: { loading: true}
+    orderCreate: { loading: true},
+    orderList: { loading: true } 
 }
 // Vai gerenciar as ações e os estados do reducer
 function reducer(state, action) {
+    
     switch(action.type) {
+        // Reducer da largura da tela de ADM de pedidos
+        case SCREEN_SET_WIDTH:
+        return{
+            ...state,
+            widthScreen: true,
+        }
     // Reducer das Categorias
         case CATEGORY_LIST_REQUEST:
             return {...state, categoryList: {loading: true}}
@@ -120,7 +130,7 @@ function reducer(state, action) {
                     itemsCount: 0,
                 }
             }
-        
+        // Vai mostrar se um pedido deu certo ou não
         case ORDER_CREATE_REQUEST: 
         return { 
             ...state,
@@ -137,8 +147,38 @@ function reducer(state, action) {
             orderCreate: {loading: false, error: action.payload}
         }
 
+        // Vai mostrar a lista de pedidos na tela de ADM de pedidos
+        case ORDER_LIST_REQUEST:
+        return{
+            ...state,
+            orderList: {loading: true}
+        }
+        case ORDER_LIST_SUCCESS:
+        return{
+            ...state,
+            orderList: {loading: false, orders: action.payload}
+        }
+        case ORDER_LIST_FAIL:
+        return {
+            ...state,
+            orderList: {loading: false, error: action.payload}
+        }
 
-
+        case ORDER_QUEUE_LIST_REQUEST:
+            return{
+                ...state,
+                queueList: {loading: true}
+            }
+        case ORDER_QUEUE_LIST_SUCCESS:
+            return{
+                ...state,
+                queueList: { loading: false, queue: action.payload }
+            }
+        case ORDER_QUEUE_LIST_FAIL:
+                return{
+                    ...state,
+                    queueList: { loading: false, error: action.payload }
+                }
         default: 
             return state
     }

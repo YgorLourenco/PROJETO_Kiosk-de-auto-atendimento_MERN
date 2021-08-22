@@ -75,6 +75,31 @@ const Order = mongoose.model('Order', new mongoose.Schema({
 },
 ))
 
+// Controles da página de ADM de pedidos
+app.get('/api/orders', async(req, res) => {
+    // Ação para cancelar pedido
+    const orders = await Order.find({isDelivered: false, isCanceled: false}) 
+    res.send(orders);
+})
+// Vai adicionar um pedido por meio do id
+app.put('/api/orders/:id', async(req, res) => {
+    const order = await Order.findById(req.params.id)
+    if (order) {
+        if(req.body.action === 'ready') {
+            order.isReady = true
+            order.inProgress = false
+        } else if(req.body.action === 'deliver') {
+            order.isDelivered = true
+        } else if(req.body.action === 'cancel') {
+            order.isCanceled = true
+        }
+        await order.save()
+        res.send({message: 'Done'})
+    } else {
+        req.status(404).message({message:'Pedido não encontrado'})
+    }
+})
+
 app.post('/api/orders', async(req, res) => {
     // Achar o ultimo pedido que estejam com menos de -1 sendo o limite 1
     const lastOrder = await Order.find().sort({number: -1}).limit(1)
@@ -94,6 +119,19 @@ app.post('/api/orders', async(req, res) => {
     res.send(order)
 })
 
+// Rota para a tela de ordem de pedidos
+app.get('/api/orders/queue', async(req, res) => {
+    const inProgressOrders = await Order.find(
+        {inProgress: true, isCanceled: false},
+        'number'
+    )
+    const servingOrders = await Order.find(
+        {isReady: true, isDelivered: false},
+        'number'
+    )
+    res.send({inProgressOrders, servingOrders})
+})
+
 // Caminho do back-end para o Heroku
 app.use(express.static(path.join(__dirname, '/build')))
 
@@ -102,8 +140,8 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/build/index.html'))
 })
 
+// Configuração da porta local do Back-end
 const port = process.env.PORT || 5000
-
 app.listen(port, () => {
     console.log(`O servidor esta na URL http://localhost:${port}`)
 })

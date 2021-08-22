@@ -20,3 +20,13 @@ export const ORDER_SET_PAYMENT_TYPE = 'ORDER_SET_PAYMENT_TYPE'
 export const ORDER_CREATE_REQUEST = 'ORDER_CREATE_REQUEST'
 export const ORDER_CREATE_SUCCESS = 'ORDER_CREATE_SUCCESS'
 export const ORDER_CREATE_FAIL = 'ORDER_CREATE_FAIL'
+// Ação para criar uma lista dos pedidos na tela de ADM de pedidos
+export const ORDER_LIST_REQUEST = 'ORDER_LIST_REQUEST'
+export const ORDER_LIST_SUCCESS = 'ORDER_LIST_SUCCESS'
+export const ORDER_LIST_FAIL = 'ORDER_LIST_FAIL'
+// Ação que regula a largura da página de ADM
+export const SCREEN_SET_WIDTH = 'SCREEN_SET_WIDTH'
+// 
+export const ORDER_QUEUE_LIST_REQUEST = 'ORDER_QUEUE_LIST_REQUEST'
+export const ORDER_QUEUE_LIST_SUCCESS = 'ORDER_QUEUE_LIST_SUCCESS'
+export const ORDER_QUEUE_LIST_FAIL = 'ORDER_QUEUE_LIST_FAIL'

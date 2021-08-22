@@ -1,5 +1,5 @@
 import Axios from "axios"
-import { CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, ORDER_ADD_ITEM, ORDER_CLEAR, ORDER_CREATE_FAIL, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS, ORDER_REMOVE_ITEM, ORDER_SET_PAYMENT_TYPE, ORDER_SET_TYPE, PRODUCT_LIST_FAIL, PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS } from "./constants"
+import { CATEGORY_LIST_FAIL, CATEGORY_LIST_REQUEST, CATEGORY_LIST_SUCCESS, ORDER_ADD_ITEM, ORDER_CLEAR, ORDER_CREATE_FAIL, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS, ORDER_LIST_FAIL, ORDER_LIST_REQUEST, ORDER_LIST_SUCCESS, ORDER_QUEUE_LIST_FAIL, ORDER_QUEUE_LIST_REQUEST, ORDER_QUEUE_LIST_SUCCESS, ORDER_REMOVE_ITEM, ORDER_SET_PAYMENT_TYPE, ORDER_SET_TYPE, PRODUCT_LIST_FAIL, PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS, SCREEN_SET_WIDTH } from "./constants"
 
 // Ação para entrar na pagina de pedidos
 export const setOrderType = (dispatch, orderType) => {
@@ -84,6 +84,40 @@ export const createOrder = async (dispatch, order) => {
     } catch (error) {
         dispatch({
             type: ORDER_CREATE_FAIL,
+            payload: error.message
+        })
+    }
+}
+// Lista dos pedidos na tela de ADMIN
+export const listOrders = async (dispatch) => {
+    dispatch({ type: SCREEN_SET_WIDTH})
+    dispatch({type: ORDER_LIST_REQUEST})
+    try {
+        const { data } = await Axios.get(`/api/orders`)
+        return dispatch({
+            type: ORDER_LIST_SUCCESS,
+            payload: data,
+        })
+    } catch (error) {
+        return dispatch({
+            type: ORDER_LIST_FAIL,
+            payload: error.message
+        })
+    }
+}
+
+export const listQueue = async (dispatch) => {
+    dispatch({ type: SCREEN_SET_WIDTH})
+    dispatch({type: ORDER_QUEUE_LIST_REQUEST})
+    try {
+        const { data } = await Axios.get(`/api/orders/queue`)
+        return dispatch({
+            type: ORDER_QUEUE_LIST_SUCCESS,
+            payload: data,
+        })
+    } catch (error) {
+        return dispatch({
+            type: ORDER_QUEUE_LIST_FAIL,
             payload: error.message
         })
     }
